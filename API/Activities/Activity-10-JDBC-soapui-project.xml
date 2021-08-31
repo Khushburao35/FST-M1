@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="58abbf73-c575-4e9f-983b-1637db1da6d9" activeEnvironment="Default" name="Activity_10_JDBC" resourceRoot="" soapui-version="5.6.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:RestService" id="91696daa-4ed6-461c-8573-c5c3cd3ac8d9" wadlVersion="http://wadl.dev.java.net/2009/02" name="https://petstore.swagger.io" type="rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache/><con:endpoints><con:endpoint>https://petstore.swagger.io</con:endpoint></con:endpoints><con:resource name="PetId" path="/v2/pet/{petId}" id="363295e3-6f32-4ab6-a834-108724fed44b"><con:settings/><con:parameters><con:parameter><con:name>petId</con:name><con:value>petId</con:value><con:style>TEMPLATE</con:style><con:default>petId</con:default><con:path xsi:nil="true"/><con:description xsi:nil="true"/></con:parameter></con:parameters><con:method name="PetId 1" id="252294e3-f1e9-4dda-ba71-373ee0b9b7b4" method="GET"><con:settings/><con:parameters/><con:representation type="FAULT"><con:mediaType>application/json</con:mediaType><con:status>404</con:status><con:params/><con:element xmlns:ns="https://petstore.swagger.io/v2/pet/0">ns:Fault</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType>application/json</con:mediaType><con:status>200</con:status><con:params/><con:element xmlns:ns="https://petstore.swagger.io/v2/pet/0">ns:Response</con:element></con:representation><con:representation type="FAULT"><con:mediaType>application/xml</con:mediaType><con:status>405</con:status><con:params/><con:element>apiResponse</con:element></con:representation><con:request name="Request 1" id="f93c1ef4-1fe4-441a-a3fd-141cf741abb3" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://petstore.swagger.io</con:endpoint><con:request/><con:originalUri>https://petstore.swagger.io/v2/pet/petID</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters><entry key="petId" value="petID" xmlns="http://eviware.com/soapui/config"/></con:parameters><con:parameterOrder><con:entry>petId</con:entry></con:parameterOrder></con:request></con:method></con:resource></con:interface><con:testSuite id="88f8e574-87bc-457e-8b4c-9e49c06ba272" name="TestSuite"><con:description>TestSuite generated for REST Service [https://petstore.swagger.io]</con:description><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="93011ba9-fbd6-4ec0-acf4-f80aebb5c430" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TestCase" searchProperties="true"><con:description>TestCase generated for REST Resource [PetId] located at [/v2/pet/{petId}]</con:description><con:settings/><con:testStep type="groovy" name="Groovy Script" id="83b9965a-842f-466c-958d-de21ed0e5fac"><con:settings/><con:config><script>// Import the Groovy class required to work with SQL databases.
+import groovy.sql.Sql
+
+	//Import JsonSlurper
+import groovy.json.JsonSlurper
+
+//Create Object
+def slurp = new JsonSlurper()
+
+// Set up database connection properties.
+/* IMPORTANT: must start with jdbc:mysql:// */
+def url = 'jdbc:mysql://remotemysql.com:3306/CGpfjlbstY'
+def user = 'CGpfjlbstY'
+def password = 'tN2vEMQCb7'
+def driver = 'com.mysql.jdbc.Driver'
+
+// Register the MySQL JDBC driver – required for Groovy to send requests to the database.
+com.eviware.soapui.support.GroovyUtils.registerJdbcDriver( driver )
+
+// Connect to the SQL instance.
+def sql = Sql.newInstance(url, user, password, driver)
+
+// Use the SQL instance.
+sql.eachRow('SELECT * FROM petData') 
+{
+	row -> 
+	testRunner.testCase.setPropertyValue( "petID", row[0].toString())
+	testRunner.runTestStepByName("Request 1")
+	def res = context.expand('${Request 1#response}')
+	log.info ( " " + row[0] + " --> " + res)
+}
+
+// Close the SQL instance.
+sql.close()</script></con:config></con:testStep><con:testStep type="restrequest" name="Request 1" id="f8a78dbd-ee3d-4921-88d6-0d7aeafb71e1"><con:settings/><con:config service="https://petstore.swagger.io" resourcePath="/v2/pet/{petId}" methodName="PetId 1" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="Request 1" id="f93c1ef4-1fe4-441a-a3fd-141cf741abb3" mediaType="application/json"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>https://petstore.swagger.io</con:endpoint><con:request/><con:originalUri>https://petstore.swagger.io/v2/pet/0</con:originalUri><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters><entry key="petId" value="${#TestCase#petID}" xmlns="http://eviware.com/soapui/config"/></con:parameters><con:parameterOrder><con:entry>petId</con:entry></con:parameterOrder></con:restRequest></con:config></con:testStep><con:properties><con:property><con:name>petID</con:name><con:value>77235</con:value></con:property></con:properties></con:testCase><con:properties><con:property><con:name>petID</con:name><con:value/></con:property></con:properties></con:testSuite><con:properties><con:property><con:name>petID</con:name><con:value>propertyValue</con:value></con:property></con:properties><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
