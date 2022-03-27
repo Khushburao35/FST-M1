@@ -1,3 +1,4 @@
 testing file1
 
-testinmg file2
+testing file2
+testing file3
